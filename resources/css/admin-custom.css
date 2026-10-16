@@ -20,3 +20,116 @@
 .animate-toast-pop {
     animation: toast-pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
+
+/* Print Styles */
+@media print {
+    @page {
+        size: auto;
+        margin: 12mm 10mm;
+    }
+
+    /* Completely hide navbar, header, sidebar, overlays, and anything marked print:hidden */
+    header,
+    nav,
+    aside,
+    #hs-application-sidebar,
+    .hs-overlay,
+    .hs-overlay-backdrop,
+    [data-hs-overlay],
+    .print\:hidden {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        position: absolute !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+    }
+
+    /* Background and layout resets */
+    html,
+    body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-size: 11px !important;
+        line-height: 1.4 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Clear sidebar padding offset (lg:ps-64, etc.) */
+    .lg\:ps-64,
+    .lg\:ps-65,
+    .w-full,
+    #main-content {
+        padding: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 0 !important;
+        background: transparent !important;
+    }
+
+    /* Eliminate horizontal scrollbar from overflowing tables */
+    div, section, article, main {
+        overflow: visible !important;
+    }
+
+    .overflow-x-auto,
+    .overflow-y-auto,
+    .overflow-hidden {
+        overflow: visible !important;
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+    }
+
+    .overflow-x-auto::-webkit-scrollbar,
+    .overflow-y-auto::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    /* Clean table layout for printed pages */
+    table {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        border-collapse: collapse !important;
+        table-layout: auto !important;
+    }
+
+    th,
+    td {
+        border: 1px solid #d1d5db !important;
+        padding: 5px 7px !important;
+        font-size: 11px !important;
+        white-space: normal !important;
+        word-break: normal !important;
+        overflow-wrap: break-word !important;
+    }
+
+    thead {
+        display: table-header-group !important;
+    }
+
+    tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    /* Remove shadows for sharp print output */
+    .shadow-sm,
+    .shadow-md,
+    .shadow-lg,
+    .shadow-xl {
+        box-shadow: none !important;
+    }
+
+    .rounded-2xl,
+    .rounded-xl {
+        border-radius: 4px !important;
+    }
+}

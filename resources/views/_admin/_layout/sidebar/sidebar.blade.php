@@ -3,7 +3,7 @@
 @endphp
 
 <div id="hs-application-sidebar"
-    class="hs-overlay  [--auto-close:lg]
+    class="print:hidden hs-overlay [--auto-close:lg]
   hs-overlay-open:translate-x-0
   -translate-x-full transition-all duration-300 transform
   w-65 h-full
@@ -16,8 +16,9 @@
     <div class="relative flex flex-col h-full max-h-full">
         <div class="px-2 pt-0 flex items-center bg-primary/3">
             <a class="flex-none rounded-xl text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80"
-                href="#" aria-label="Smart NIBS">
-                <img src="{{ asset('images/logo-light.png') }}" alt="Logo Smart NIBS" class="w-56 h-auto p-4">
+                href="{{ route('admin.dashboard') }}" aria-label="Smart Inventory">
+                <img src="{{ asset('images/logo-light.png') }}" alt="Logo Smart Inventory" class="block dark:hidden w-full max-w-[240px] h-auto p-2">
+                <img src="{{ asset('images/logo-dark.png') }}" alt="Logo Smart Inventory" class="hidden dark:block w-full max-w-[240px] h-auto p-2">
             </a>
         </div>
 

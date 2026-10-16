@@ -27,12 +27,19 @@ class SidebarMenuSeeder extends Seeder
             ['key' => 'utama',     'label' => 'Utama',     'color' => 'blue',    'sort_order' => 10, 'created_at' => $now, 'updated_at' => $now],
         ]);
 
-        $superadmin = UserConst::SUPERADMIN;
-        $superadminOnly = [$superadmin];
+        $admin = UserConst::ADMIN;
+        $staff = UserConst::STAFF;
+        $manager = UserConst::MANAGER;
+
+        $allRoles = [$admin, $staff, $manager];
+        $adminOnly = [$admin];
+        $staffOnly = [$staff];
+        $managerOnly = [$manager];
 
         // =====================================================================
         // GROUP: utama
         // =====================================================================
+        // 1. Dashboard (All roles)
         $dashboardId = DB::table(DatabaseConst::SIDEBAR_MENU())->insertGetId([
             'label' => 'Dashboard',
             'route_name' => 'admin.dashboard',
@@ -43,31 +50,72 @@ class SidebarMenuSeeder extends Seeder
             'created_at' => $now,
             'updated_at' => $now,
         ]);
-        $this->assignAccess($dashboardId, $superadminOnly, $now);
+        $this->assignAccess($dashboardId, $allRoles, $now);
 
-        $penggunaId = DB::table(DatabaseConst::SIDEBAR_MENU())->insertGetId([
-            'label' => 'Pengguna Aplikasi',
-            'route_name' => 'admin.users.index',
-            'icon' => '_admin._layout.icons.sidebar.user',
+        // 2. Data Stok Barang (All roles)
+        $itemsId = DB::table(DatabaseConst::SIDEBAR_MENU())->insertGetId([
+            'label' => 'Stok Barang',
+            'route_name' => 'admin.items.index',
+            'icon' => '_admin._layout.icons.sidebar.item',
+            'group' => 'utama',
+            'sort_order' => 20,
+            'is_active' => 1,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+        $this->assignAccess($itemsId, $allRoles, $now);
+
+        // 3. Barang Masuk & Keluar (Staff Gudang only)
+        $transactionsId = DB::table(DatabaseConst::SIDEBAR_MENU())->insertGetId([
+            'label' => 'Barang Masuk & Keluar',
+            'route_name' => 'admin.transactions.index',
+            'icon' => '_admin._layout.icons.sidebar.transaction',
+            'group' => 'utama',
+            'sort_order' => 30,
+            'is_active' => 1,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+        $this->assignAccess($transactionsId, $staffOnly, $now);
+
+        // 4. Laporan Stok (Manager only)
+        $reportsId = DB::table(DatabaseConst::SIDEBAR_MENU())->insertGetId([
+            'label' => 'Laporan Stok',
+            'route_name' => 'admin.reports.index',
+            'icon' => '_admin._layout.icons.sidebar.report',
             'group' => 'utama',
             'sort_order' => 40,
             'is_active' => 1,
             'created_at' => $now,
             'updated_at' => $now,
         ]);
-        $this->assignAccess($penggunaId, $superadminOnly, $now);
+        $this->assignAccess($reportsId, $managerOnly, $now);
 
-        $sidebarMgmtId = DB::table(DatabaseConst::SIDEBAR_MENU())->insertGetId([
-            'label' => 'Manajemen Sidebar',
-            'route_name' => 'admin.sidebar_menu.index',
-            'icon' => '_admin._layout.icons.sidebar.data_master',
+        // 5. Kelola Akun User (Admin only)
+        $penggunaId = DB::table(DatabaseConst::SIDEBAR_MENU())->insertGetId([
+            'label' => 'Pengguna Aplikasi',
+            'route_name' => 'admin.users.index',
+            'icon' => '_admin._layout.icons.sidebar.user',
             'group' => 'utama',
             'sort_order' => 50,
             'is_active' => 1,
             'created_at' => $now,
             'updated_at' => $now,
         ]);
-        $this->assignAccess($sidebarMgmtId, $superadminOnly, $now);
+        $this->assignAccess($penggunaId, $adminOnly, $now);
+
+        // 6. Manajemen Sidebar (Admin only)
+        $sidebarMgmtId = DB::table(DatabaseConst::SIDEBAR_MENU())->insertGetId([
+            'label' => 'Manajemen Sidebar',
+            'route_name' => 'admin.sidebar_menu.index',
+            'icon' => '_admin._layout.icons.sidebar.data_master',
+            'group' => 'utama',
+            'sort_order' => 60,
+            'is_active' => 1,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+        $this->assignAccess($sidebarMgmtId, $adminOnly, $now);
 
     }
 

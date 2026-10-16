@@ -92,9 +92,14 @@ class UserUsecase extends Usecase
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'access_type' => 'required|in:'.implode(',', array_keys(UserConst::getAppAccessTypes())),
+            'password' => 'nullable|min:6',
         ]);
 
         $validator->validate();
+
+        $password = $data->filled('password')
+            ? Hash::make($data['password'])
+            : UserConst::DEFAULT_PASSWORD;
 
         DB::beginTransaction();
         try {
@@ -103,7 +108,7 @@ class UserUsecase extends Usecase
                     'name' => $data['name'],
                     'email' => $data['email'],
                     'access_type' => $data['access_type'],
-                    'password' => UserConst::DEFAULT_PASSWORD,
+                    'password' => $password,
                     'is_active' => 1,
                     'created_by' => Auth::user()?->id,
                     'created_at' => now(),
@@ -132,6 +137,7 @@ class UserUsecase extends Usecase
             'name' => 'required|min:4',
             'email' => 'required|email|unique:users,email,'.$id,
             'access_type' => 'required|in:'.implode(',', array_keys(UserConst::getAppAccessTypes())),
+            'password' => 'nullable|min:6',
         ]);
 
         $validator->validate();
@@ -143,6 +149,10 @@ class UserUsecase extends Usecase
             'updated_by' => Auth::user()?->id,
             'updated_at' => now(),
         ];
+
+        if ($data->filled('password')) {
+            $update['password'] = Hash::make($data['password']);
+        }
 
         DB::beginTransaction();
 

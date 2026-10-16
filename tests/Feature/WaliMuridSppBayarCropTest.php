@@ -1,5 +1,6 @@
 <?php
 
+use App\Usecase\WaliMuridUsecase;
 use Illuminate\Support\Facades\Route;
 
 test('wali murid payment routes are not registered in starter kit', function () {
@@ -10,6 +11,6 @@ test('wali murid payment routes are not registered in starter kit', function () 
 });
 
 test('wali murid upload asset and usecase are removed', function () {
-    expect(class_exists(App\Usecase\WaliMuridUsecase::class, false))->toBeFalse()
+    expect(class_exists(WaliMuridUsecase::class, false))->toBeFalse()
         ->and(file_exists(resource_path('js/wali-murid-bukti-upload.js')))->toBeFalse();
 });

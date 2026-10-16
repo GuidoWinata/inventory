@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ env('APP_ENV') == 'local' ? '[LOCAL] ' : '' }}Smart NIBS</title>
+    <title>{{ env('APP_ENV') == 'local' ? '[LOCAL] ' : '' }}{{ config('app.name', 'SmartInventory') }}</title>
 
     {{-- Favicon --}}
     @include('_admin._layout.favicon')
@@ -22,6 +22,16 @@
     <!-- NProgress -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" />
 
+    <!-- Theme Mode Initializer (Preline Dark Mode Support) -->
+    <script>
+        const html = document.querySelector('html');
+        const theme = localStorage.getItem('hs_theme') || 'default';
+        if (theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+    </script>
 </head>
 
 <body class="bg-gray-50 dark:bg-neutral-900">

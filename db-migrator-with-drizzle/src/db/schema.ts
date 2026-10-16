@@ -1,9 +1,11 @@
 import {
     bigint,
+    date,
     index,
     int,
     longtext,
     mediumtext,
+    mysqlEnum,
     mysqlTable,
     smallint,
     text,
@@ -158,4 +160,38 @@ export const sidebarMenusTable = mysqlTable('sidebar_menus', {
 }, (t) => [
     index('sidebar_menus_parent_id_index').on(t.parent_id),
     index('sidebar_menus_group_sort_order_index').on(t.group, t.sort_order),
+]);
+
+export const itemsTable = mysqlTable('items', {
+    id: bigint({ mode: 'number', unsigned: true }).autoincrement().primaryKey(),
+    code: varchar({ length: 255 }).notNull(),
+    name: varchar({ length: 255 }).notNull(),
+    category: varchar({ length: 255 }).notNull(),
+    unit: varchar({ length: 50 }).notNull(),
+    stock: int().notNull().default(0),
+    created_by: bigint({ mode: 'number', unsigned: true }).references((): AnyMySqlColumn => usersTable.id),
+    created_at: timestamp(),
+    updated_by: bigint({ mode: 'number', unsigned: true }).references((): AnyMySqlColumn => usersTable.id),
+    updated_at: timestamp(),
+    deleted_by: bigint({ mode: 'number', unsigned: true }).references((): AnyMySqlColumn => usersTable.id),
+    deleted_at: timestamp(),
+}, (t) => [
+    uniqueIndex('items_code_unique').on(t.code),
+]);
+
+export const transactionsTable = mysqlTable('transactions', {
+    id: bigint({ mode: 'number', unsigned: true }).autoincrement().primaryKey(),
+    item_id: bigint({ mode: 'number', unsigned: true }).notNull().references((): AnyMySqlColumn => itemsTable.id, { onDelete: 'cascade' }),
+    user_id: bigint({ mode: 'number', unsigned: true }).notNull().references((): AnyMySqlColumn => usersTable.id),
+    type: mysqlEnum('type', ['in', 'out']).notNull(),
+    quantity: int().notNull(),
+    date: date('date', { mode: 'string' }).notNull(),
+    notes: text(),
+    created_at: timestamp(),
+    updated_at: timestamp(),
+}, (t) => [
+    index('transactions_item_id_index').on(t.item_id),
+    index('transactions_user_id_index').on(t.user_id),
+    index('transactions_type_index').on(t.type),
+    index('transactions_date_index').on(t.date),
 ]);

@@ -71,6 +71,17 @@
                     @enderror
                 </div>
 
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium mb-2 dark:text-white">Password Baru (Opsional)</label>
+                    <input type="password" id="password" name="password"
+                        class="py-2.5 sm:py-3 px-4 block w-full border-gray-200 rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600 @error('password') border-red-500 @enderror"
+                        placeholder="Kosongkan jika tidak ingin mengubah password">
+                    <p class="text-xs text-gray-500 dark:text-neutral-400 mt-1">Biarkan kosong jika tidak ingin mengubah password.</p>
+                    @error('password')
+                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <div class="flex justify-start gap-x-2 mt-4">
                     <a navigate href="{{ route('admin.users.index') }}"
                         class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800">

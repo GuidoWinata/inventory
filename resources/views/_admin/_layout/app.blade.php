@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ env('APP_ENV') == 'local' ? '[LOCAL] ' : '' }}Smart NIBS</title>
+    <title>{{ env('APP_ENV') == 'local' ? '[LOCAL] ' : '' }}{{ config('app.name', 'SmartInventory') }}</title>
 
     {{-- Favicon --}}
     @include('_admin._layout.favicon')
@@ -22,12 +22,27 @@
     <!-- NProgress -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" />
 
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Theme Mode Initializer (Preline Dark Mode Support) -->
+    <script>
+        const html = document.querySelector('html');
+        const theme = localStorage.getItem('hs_theme') || 'default';
+        if (theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+    </script>
+
+    @stack('styles')
 </head>
 
 <body>
     <!-- ========== HEADER ========== -->
     <header
-        class="inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-[48] w-full bg-white border-b border-gray-200 text-sm py-1 lg:py-0 xl:py-0 lg:ps-65 dark:bg-neutral-800 dark:border-neutral-700 fixed top-0 left-0 right-0 shadow-lg">
+        class="print:hidden inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-[48] w-full bg-white border-b border-gray-200 text-sm py-1 lg:py-0 xl:py-0 lg:ps-65 dark:bg-neutral-800 dark:border-neutral-700 fixed top-0 left-0 right-0 shadow-lg">
         <nav class="px-4 sm:px-2 flex basis-full items-center w-full mx-auto">
             <div class="me-1 lg:me-0 lg:hidden flex items-center">
                 <!-- Navigation Toggle -->
@@ -47,8 +62,9 @@
                 <!-- End Navigation Toggle -->
                 <!-- Logo -->
                 <a class="flex-none rounded-md text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80"
-                    href="#" aria-label="Preline">
-                    <img src="{{ asset('images/logo-light.png') }}" alt="Logo Smart NIBS" class="w-40 h-auto p-4">
+                    href="{{ route('admin.dashboard') }}" aria-label="Smart Inventory">
+                    <img src="{{ asset('images/logo-light.png') }}" alt="Logo Smart Inventory" class="block dark:hidden w-48 h-auto p-2">
+                    <img src="{{ asset('images/logo-dark.png') }}" alt="Logo Smart Inventory" class="hidden dark:block w-48 h-auto p-2">
                 </a>
                 <!-- End Logo -->
 
@@ -60,14 +76,14 @@
             </div>
         </nav>
     </header>
-    <div class="mt-16 sm:mt-0"></div>
+    <div class="mt-16 sm:mt-0 print:hidden"></div>
     <!-- ========== END HEADER ========== -->
 
     @include('_admin._layout.sidebar.sidebar')
 
     <!-- Content -->
-    <div class="w-full lg:ps-64 bg-gray-50 dark:bg-neutral-900 min-h-screen">
-        <div id="main-content" class="space-y-6 px-6 py-8 sm:px-8 sm:py-10 max-w-screen-2xl mx-auto w-full">
+    <div class="w-full lg:ps-64 bg-gray-50 dark:bg-neutral-900 min-h-screen print:ps-0 print:p-0 print:m-0 print:bg-white print:min-h-0">
+        <div id="main-content" class="space-y-6 px-6 py-8 sm:px-8 sm:py-10 max-w-screen-2xl mx-auto w-full print:p-0 print:m-0 print:max-w-none print:w-full print:space-y-4">
             @if (session('success'))
                 <div id="spa-flash-success" style="display: none;">{{ session('success') }}</div>
             @endif
@@ -84,6 +100,9 @@
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <!-- NProgress -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
 
     @stack('scripts')
 

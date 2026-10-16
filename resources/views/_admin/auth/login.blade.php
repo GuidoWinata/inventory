@@ -5,7 +5,8 @@
 @section('content')
     <div class="w-full max-w-md">
         <div class="mb-6 flex justify-center">
-            <img src="{{ asset('images/logo-light.png') }}" alt="Logo" class="w-auto h-15">
+            <img src="{{ asset('images/logo-light.png') }}" alt="Logo Smart Inventory" class="block dark:hidden w-auto h-20">
+            <img src="{{ asset('images/logo-dark.png') }}" alt="Logo Smart Inventory" class="hidden dark:block w-auto h-20">
         </div>
         <div class="bg-white shadow-2xl dark:bg-neutral-900 dark:border-neutral-700 rounded-2xl p-6 ">
             <div class="text-center mb-8">
@@ -29,7 +30,7 @@
 
                     <!-- Form Group -->
                     <div>
-                        <label for="email" class="block text-sm mb-2 dark:text-white">Akun (Email / NPSN)</label>
+                        <label for="email" class="block text-sm mb-2 dark:text-white">Akun</label>
                         <div class="relative">
                             <input type="text" id="email" name="email"
                                 class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"

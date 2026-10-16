@@ -11,6 +11,16 @@ class DatabaseConst
         return self::DB_CORE().'.users';
     }
 
+    public static function ITEM(): string
+    {
+        return self::DB_CORE().'.items';
+    }
+
+    public static function TRANSACTION(): string
+    {
+        return self::DB_CORE().'.transactions';
+    }
+
     public static function SIDEBAR_MENU(): string
     {
         return self::DB_CORE().'.sidebar_menus';

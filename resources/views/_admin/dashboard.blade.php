@@ -101,7 +101,7 @@
                         </h1>
 
                         <p class="mt-4 text-[15px] leading-7 text-neutral-500 dark:text-neutral-400 max-w-xl">
-                            Selamat datang kembali di Aplikasi Smart NIBS
+                            Selamat datang kembali di Aplikasi {{ config('app.name', 'SmartInventory') }}
                         </p>
 
                     </div>
@@ -119,6 +119,144 @@
 
                 </div>
             </div>
+        </section>
+
+        {{-- SUMMARY CARDS (PRD Fitur 2) --}}
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {{-- Total Jenis Barang --}}
+            <x-admin.card :fit="true">
+                <div class="flex items-center justify-between p-2">
+                    <div>
+                        <p class="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-neutral-400">Total Jenis Barang</p>
+                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">{{ $stats['total_item_types'] }}</h3>
+                        <p class="text-xs text-gray-400 dark:text-neutral-500 mt-0.5">Item aktif terdaftar</p>
+                    </div>
+                    <div class="size-12 rounded-xl bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                        <svg class="size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                    </div>
+                </div>
+            </x-admin.card>
+
+            {{-- Total Stok Fisik --}}
+            <x-admin.card :fit="true">
+                <div class="flex items-center justify-between p-2">
+                    <div>
+                        <p class="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-neutral-400">Total Stok Fisik</p>
+                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">{{ number_format($stats['total_physical_stock']) }}</h3>
+                        <p class="text-xs text-gray-400 dark:text-neutral-500 mt-0.5">Akumulasi kuantitas barang</p>
+                    </div>
+                    <div class="size-12 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                        <svg class="size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                </div>
+            </x-admin.card>
+
+            {{-- Total Transaksi Masuk --}}
+            <x-admin.card :fit="true">
+                <div class="flex items-center justify-between p-2">
+                    <div>
+                        <p class="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-neutral-400">Total Barang Masuk</p>
+                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">{{ $stats['total_transactions_in'] }}</h3>
+                        <p class="text-xs text-gray-400 dark:text-neutral-500 mt-0.5">Transaksi penerimaan</p>
+                    </div>
+                    <div class="size-12 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+                        <svg class="size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                        </svg>
+                    </div>
+                </div>
+            </x-admin.card>
+
+            {{-- Total Transaksi Keluar --}}
+            <x-admin.card :fit="true">
+                <div class="flex items-center justify-between p-2">
+                    <div>
+                        <p class="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-neutral-400">Total Barang Keluar</p>
+                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">{{ $stats['total_transactions_out'] }}</h3>
+                        <p class="text-xs text-gray-400 dark:text-neutral-500 mt-0.5">Transaksi pengeluaran</p>
+                    </div>
+                    <div class="size-12 rounded-xl bg-orange-500/10 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 flex items-center justify-center shrink-0">
+                        <svg class="size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </div>
+                </div>
+            </x-admin.card>
+        </section>
+
+        {{-- LATEST TRANSACTIONS TABLE (PRD Fitur 2) --}}
+        <section class="space-y-3">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-800 dark:text-neutral-200">5 Transaksi Terakhir</h2>
+                    <p class="text-xs text-gray-500 dark:text-neutral-400">Aktivitas arus barang masuk dan keluar terbaru</p>
+                </div>
+                @if(Auth::user()->isStaff())
+                    <x-admin.button href="{{ route('admin.transactions.index') }}" size="sm" color="outline-primary">
+                        Lihat Semua Riwayat &rarr;
+                    </x-admin.button>
+                @endif
+            </div>
+
+            <x-admin.table.wrapper>
+                <x-admin.table>
+                    <x-admin.table.thead>
+                        <tr>
+                            <x-admin.table.th>Tanggal</x-admin.table.th>
+                            <x-admin.table.th>Barang</x-admin.table.th>
+                            <x-admin.table.th>Tipe</x-admin.table.th>
+                            <x-admin.table.th>Jumlah</x-admin.table.th>
+                            <x-admin.table.th>Pencatat</x-admin.table.th>
+                        </tr>
+                    </x-admin.table.thead>
+                    <x-admin.table.tbody>
+                        @forelse($stats['latest_transactions'] as $tx)
+                            <x-admin.table.tr>
+                                <x-admin.table.td>
+                                    <span class="text-sm text-gray-800 dark:text-neutral-200">
+                                        {{ \Carbon\Carbon::parse($tx->date)->translatedFormat('d M Y') }}
+                                    </span>
+                                </x-admin.table.td>
+                                <x-admin.table.td>
+                                    <span class="font-medium text-gray-900 dark:text-white block">{{ $tx->item_name }}</span>
+                                    <span class="block text-xs font-mono text-gray-400 dark:text-neutral-500">{{ $tx->item_code }}</span>
+                                </x-admin.table.td>
+                                <x-admin.table.td>
+                                    @if($tx->type === 'in')
+                                        <span class="inline-flex items-center gap-1.5 py-0.5 px-2.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                            Masuk
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1.5 py-0.5 px-2.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400">
+                                            Keluar
+                                        </span>
+                                    @endif
+                                </x-admin.table.td>
+                                <x-admin.table.td>
+                                    <span class="text-sm font-semibold text-gray-800 dark:text-neutral-200">
+                                        {{ $tx->quantity }} {{ $tx->item_unit }}
+                                    </span>
+                                </x-admin.table.td>
+                                <x-admin.table.td>
+                                    <span class="text-sm text-gray-600 dark:text-neutral-400">
+                                        {{ $tx->user_name ?? '-' }}
+                                    </span>
+                                </x-admin.table.td>
+                            </x-admin.table.tr>
+                        @empty
+                            <tr>
+                                <td colspan="5">
+                                    <x-admin.empty-state message="Belum ada transaksi barang yang dicatat." />
+                                </td>
+                            </tr>
+                        @endforelse
+                    </x-admin.table.tbody>
+                </x-admin.table>
+            </x-admin.table.wrapper>
         </section>
 
         {{-- MENU --}}

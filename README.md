@@ -4,7 +4,7 @@ A modern Laravel starter kit with admin panel, built with Laravel 12, Bun for bu
 
 ## Features
 
-- 🚀 **Laravel 12** - Latest Laravel framework
+- 🚀 **Laravel 13** - Latest Laravel framework
 - 🎨 **Tailwind CSS 4** - Utility-first CSS framework
 - 🧩 **Preline UI** - Beautiful UI components
 - 🌙 **Dark Mode** - Built-in dark mode support

@@ -11,7 +11,6 @@ export default defineConfig({
                 'resources/css/admin-custom.css',
                 'resources/js/admin-custom.js',
                 'resources/js/bukti-transfer-viewer.js',
-                'resources/js/wali-murid-bukti-upload.js',
             ],
             refresh: true,
         }),

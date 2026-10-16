@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ItemController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SidebarMenuController;
+use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Benchmark;
@@ -9,6 +12,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect()->route('admin.dashboard');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', fn () => redirect()->route('admin.dashboard'));
+    Route::get('/items', fn () => redirect()->route('admin.items.index'));
+    Route::get('/transactions', fn () => redirect()->route('admin.transactions.index'));
+    Route::get('/reports', fn () => redirect()->route('admin.reports.index'));
+    Route::get('/users', fn () => redirect()->route('admin.users.index'));
 });
 
 Route::get('test', function () {
@@ -21,9 +32,36 @@ Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'doLogin'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Admin Users Routes
+// Admin / App Routes
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    // Items (Stok Barang) Routes - All roles can view, Admin can CRUD
+    Route::prefix('items')->name('items.')->group(function () {
+        Route::get('/', [ItemController::class, 'index'])->name('index');
+        Route::get('/detail/{id}', [ItemController::class, 'detail'])->name('detail');
+
+        Route::middleware('access_type:1')->group(function () {
+            Route::get('/add', [ItemController::class, 'add'])->name('add');
+            Route::post('/create', [ItemController::class, 'doCreate'])->name('create');
+            Route::get('/update/{id}', [ItemController::class, 'update'])->name('update');
+            Route::post('/update/{id}', [ItemController::class, 'doUpdate'])->name('doUpdate');
+            Route::delete('/delete/{id}', [ItemController::class, 'delete'])->name('delete');
+        });
+    });
+
+    // Transactions (Barang Masuk & Keluar) Routes - Staff Gudang Only
+    Route::middleware('access_type:2')->prefix('transactions')->name('transactions.')->group(function () {
+        Route::get('/', [TransactionController::class, 'index'])->name('index');
+        Route::get('/add', [TransactionController::class, 'add'])->name('add');
+        Route::post('/create', [TransactionController::class, 'doCreate'])->name('create');
+        Route::get('/detail/{id}', [TransactionController::class, 'detail'])->name('detail');
+    });
+
+    // Reports (Laporan Stok) Routes - Manager Only
+    Route::middleware('access_type:3')->prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [ReportController::class, 'index'])->name('index');
+    });
 
     Route::middleware('access_type:1')->prefix('users')->name('users.')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
